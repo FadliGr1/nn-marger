@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMZ Photo Integrator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>KMZ Photo Integrator</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="tools-section">
+            <div class="container">
+                <div class="tool-container">
+                    <div class="tool-info">
+                        <div class="info-card">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Tools ini akan mengintegrasikan foto ke file KMZ dengan membuat file KMZ baru. Hanya
+                                placemark dengan nama yang dimulai dengan "<strong>?-</strong>" yang akan diproses.</p>
+                        </div>
+                    </div>
+
+                    <div class="upload-area">
+                        <div class="file-upload" id="kmz-upload">
+                            <div class="file-upload-content">
+                                <i class="fas fa-file-archive"></i>
+                                <h3>Upload File KMZ</h3>
+                                <p>Tarik dan lepas file KMZ Anda di sini atau klik untuk memilih</p>
+                                <input type="file" id="kmz-file" accept=".kmz" hidden>
+                                <button class="btn btn-outline" id="kmz-browse-btn">Pilih File</button>
+                            </div>
+                            <div class="file-info" id="kmz-file-info" style="display: none;">
+                                <div class="file-preview">
+                                    <i class="fas fa-file-archive"></i>
+                                </div>
+                                <div class="file-details">
+                                    <h4 id="kmz-filename">filename.kmz</h4>
+                                    <p id="kmz-filesize">0 KB</p>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                                <button class="btn-remove" id="kmz-remove-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="file-upload" id="zip-upload">
+                            <div class="file-upload-content">
+                                <i class="fas fa-file-zipper"></i>
+                                <h3>Upload File ZIP Foto</h3>
+                                <p>Tarik dan lepas file ZIP berisi foto JPG/PNG di sini atau klik untuk memilih</p>
+                                <input type="file" id="zip-file" accept=".zip" hidden>
+                                <button class="btn btn-outline" id="zip-browse-btn">Pilih File</button>
+                            </div>
+                            <div class="file-info" id="zip-file-info" style="display: none;">
+                                <div class="file-preview">
+                                    <i class="fas fa-file-zipper"></i>
+                                </div>
+                                <div class="file-details">
+                                    <h4 id="zip-filename">filename.zip</h4>
+                                    <p id="zip-filesize">0 KB</p>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                                <button class="btn-remove" id="zip-remove-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="options-area">
+                        <h3>Pilih Metode Integrasi</h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="option1" name="integration-method" value="match-name" checked>
+                                <label for="option1">
+                                    <div class="option-content">
+                                        <div class="option-title">Integrasi Berdasarkan Nama</div>
+                                        <div class="option-description">Foto ditambahkan ke dalam placemark yang
+                                            memiliki nama sama dengan file foto</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="option2" name="integration-method" value="sequential">
+                                <label for="option2">
+                                    <div class="option-content">
+                                        <div class="option-title">Integrasi Berurutan</div>
+                                        <div class="option-description">Foto ditambahkan berdasarkan urutan file ke
+                                            dalam placemark secara berurutan</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="process-area">
+                        <button class="btn btn-primary btn-large" id="process-btn" disabled>Proses Integrasi</button>
+                        <div class="warning-container" id="warning-container"></div>
+                    </div>
+
+                    <div class="result-area" id="result-area" style="display: none;">
+                        <div class="result-header">
+                            <h3>Hasil Integrasi</h3>
+                            <p>File KMZ dengan foto terintegrasi siap untuk diunduh</p>
+                        </div>
+                        <div class="result-content">
+                            <div class="result-info">
+                                <div class="info-item">
+                                    <span class="label">Total Placemark ?-:</span>
+                                    <span class="value" id="total-placemarks">0</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Total Foto:</span>
+                                    <span class="value" id="total-photos">0</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Foto Terintegrasi:</span>
+                                    <span class="value" id="integrated-photos">0</span>
+                                </div>
+                            </div>
+                            <div class="result-action">
+                                <button class="btn btn-success" id="download-btn">
+                                    <i class="fas fa-download"></i> Download KMZ
+                                </button>
+                            </div>
+                        </div>
+                        <div class="result-logs" id="result-logs"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 KMZ Photo Integrator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for notifications -->
+    <div class="modal" id="notification-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Notifikasi</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <p id="modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modal-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Memproses...</p>
+    </div>
+
+    <!-- Import JSZip and other libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/kmzParser.js"></script>
+    <script src="js/photoIntegrator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
